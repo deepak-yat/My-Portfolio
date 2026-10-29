@@ -1,0 +1,355 @@
+/* =========================================
+   COVER — DARK PREMIUM HARDCOVER
+   Matches the bookshelf retrieval animation
+   ========================================= */
+
+.cover-page {
+  position: relative;
+  box-sizing: border-box;
+  padding: 12px;
+  overflow: hidden;
+  isolation: isolate;
+
+  color: #e8d7b4;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 35%,
+      rgba(131, 91, 48, 0.2),
+      transparent 58%
+    ),
+    linear-gradient(
+      145deg,
+      #382719 0%,
+      #24180f 45%,
+      #17100b 100%
+    );
+}
+
+/* Fine inset border on the hardcover */
+
+.cover-frame {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 22px 18px;
+
+  border: 1px solid rgba(204, 165, 103, 0.55);
+
+  background:
+    linear-gradient(
+      115deg,
+      rgba(255, 255, 255, 0.045),
+      transparent 35%,
+      rgba(0, 0, 0, 0.12)
+    );
+}
+
+/* Top and bottom typography */
+
+.cover-topline,
+.cover-bottom {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+
+  color: #bca078;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 7px;
+  font-weight: 500;
+  line-height: 1.7;
+  letter-spacing: 0.12em;
+}
+
+.cover-topline span:first-child,
+.cover-bottom span:first-child {
+  max-width: 78%;
+}
+
+.cover-topline span:last-child,
+.cover-bottom span:last-child {
+  flex-shrink: 0;
+}
+
+/* Main title block */
+
+.cover-main {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  width: 100%;
+  margin: auto 0;
+  padding: 20px 0;
+}
+
+.cover-eyebrow {
+  margin: 0 0 22px;
+
+  color: #c0a77e;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 7px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  line-height: 1.8;
+}
+
+/* Keep the title visually consistent with the flying book */
+
+.cover-main .cover-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+
+  width: 100%;
+  margin: 0;
+
+  color: #f0dfbd;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(25px, 5.2vw, 42px);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: 0.025em;
+  overflow-wrap: anywhere;
+}
+
+.cover-main .cover-title span {
+  display: block;
+  max-width: 100%;
+  color: inherit;
+}
+
+.cover-main .cover-title span:last-child {
+  font-size: 0.58em;
+  font-weight: 400;
+  letter-spacing: 0.13em;
+  line-height: 1.5;
+}
+
+/* Decorative star */
+
+.cover-ornament {
+  display: block;
+  margin-top: 24px;
+
+  color: #c9a66e;
+  font-size: 21px;
+  line-height: 1;
+}
+
+/* Gold divider */
+
+.cover-divider {
+  width: 58px;
+  height: 1px;
+  flex-shrink: 0;
+
+  margin: 19px 0 16px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #c9a66e,
+    transparent
+  );
+}
+
+/* Subtitle */
+
+.cover-subtitle {
+  margin: 0;
+
+  color: #d0b58b;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  line-height: 1.8;
+}
+
+/* Small-screen adjustments */
+
+@media (max-width: 480px) {
+  .cover-page {
+    padding: 8px;
+  }
+
+  .cover-frame {
+    padding: 16px 11px;
+  }
+
+  .cover-topline,
+  .cover-bottom {
+    font-size: 6px;
+    letter-spacing: 0.08em;
+  }
+
+  .cover-eyebrow {
+    font-size: 6px;
+    letter-spacing: 0.1em;
+  }
+
+  .cover-main .cover-title {
+    font-size: clamp(23px, 6vw, 32px);
+  }
+
+  .cover-ornament {
+    margin-top: 18px;
+    font-size: 18px;
+  }
+
+  .cover-divider {
+    margin: 15px 0 12px;
+  }
+
+  .cover-subtitle {
+    font-size: 7px;
+    letter-spacing: 0.12em;
+  }
+}
+/* =========================================
+   INSIDE FRONT COVER
+   ========================================= */
+
+.cover-page.cover-inside {
+  background:
+    radial-gradient(
+      ellipse at 50% 35%,
+      rgba(131, 91, 48, 0.16),
+      transparent 65%
+    ),
+    linear-gradient(145deg, #2b2016, #19110b);
+}
+
+.cover-inside .cover-frame {
+  justify-content: space-between;
+}
+
+.inside-cover-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  flex: 1;
+  padding: 18px 8px;
+}
+
+.inside-cover-ornament {
+  margin-bottom: 24px;
+  color: #c9a66e;
+  font-size: 24px;
+}
+
+.inside-cover-eyebrow {
+  margin: 0 0 16px;
+  color: #bca078;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 8px;
+  letter-spacing: 0.17em;
+}
+
+.inside-cover-title {
+  margin: 0;
+  color: #f0dfbd;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(23px, 4vw, 34px);
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.inside-cover-divider {
+  width: 48px;
+  height: 1px;
+  margin: 22px 0;
+  background: #c9a66e;
+}
+
+.inside-cover-description {
+  max-width: 95%;
+  margin: 0;
+  color: #d0c0a5;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  line-height: 1.9;
+}
+
+.inside-cover-signature {
+  margin: 24px 0 0;
+  color: #c9a66e;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+}
+
+/* =========================================
+   BACK COVER
+   ========================================= */
+
+.cover-page.cover-back {
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(131, 91, 48, 0.12),
+      transparent 70%
+    ),
+    linear-gradient(145deg, #21170f, #130e09);
+}
+
+.cover-page.cover-back .cover-frame {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.back-cover-content {
+  max-width: 85%;
+  margin: auto;
+}
+
+.back-cover-symbol {
+  display: block;
+  margin-bottom: 24px;
+  color: #c9a66e;
+  font-family: 'Playfair Display', serif;
+  font-size: 38px;
+}
+
+.back-cover-quote {
+  margin: 0;
+  color: #e8d7b4;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(16px, 3vw, 23px);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.back-cover-divider {
+  width: 45px;
+  height: 1px;
+  margin: 24px auto;
+  background: #c9a66e;
+}
+
+.back-cover-caption {
+  margin: 0;
+  color: #bca078;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  line-height: 2;
+}

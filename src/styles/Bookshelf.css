@@ -222,6 +222,230 @@
 }
 
 
+
+/* =========================================
+   BOOKSHELF SCENE
+========================================= */
+
+.bookshelf-scene {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  min-width: 0;
+  margin-inline: auto;
+}
+
+.bookshelf-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  isolation: isolate;
+  background: #171715;
+}
+
+.bookshelf-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Blend the image into the charcoal page background. */
+
+.bookshelf-vignette {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      #171715 0%,
+      transparent 12%,
+      transparent 88%,
+      #171715 100%
+    ),
+    linear-gradient(
+      180deg,
+      #171715 0%,
+      transparent 10%,
+      transparent 85%,
+      #171715 100%
+    ),
+    radial-gradient(
+      ellipse at center,
+      transparent 45%,
+      rgb(0 0 0 / 24%) 75%,
+      #171715 115%
+    );
+}
+
+
+/* =========================================
+   CLICKABLE FEATURED BOOK
+========================================= */
+
+.featured-book-hotspot {
+  position: absolute;
+  z-index: 3;
+  left: 47.5%;
+  top: 26.5%;
+  width: 12%;
+  height: 63%;
+}
+
+.featured-book-trigger {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  cursor: pointer;
+
+  clip-path: polygon(
+    0 1%,
+    66% 0,
+    100% 97%,
+    30% 100%
+  );
+}
+
+.book-light-sweep {
+  position: absolute;
+  inset: -30% -100%;
+  pointer-events: none;
+
+  background: linear-gradient(
+    110deg,
+    transparent 35%,
+    rgb(255 222 171 / 8%) 43%,
+    rgb(255 225 181 / 34%) 49%,
+    rgb(255 222 171 / 7%) 55%,
+    transparent 64%
+  );
+
+  opacity: 0;
+  transform: translateX(-70%);
+
+  transition:
+    transform 650ms ease,
+    opacity 300ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .featured-book-hotspot:hover .book-light-sweep {
+    opacity: 1;
+    transform: translateX(70%);
+  }
+}
+
+.featured-book-trigger:focus-visible {
+  outline: 2px solid #e6cfaa;
+  outline-offset: 5px;
+  clip-path: none;
+}
+
+.featured-book-trigger:disabled {
+  cursor: default;
+}
+
+/* Hover invitation. */
+
+.book-hover-hint {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  top: 32%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  width: max-content;
+  max-width: 200px;
+  padding: 11px 14px;
+
+  border: 1px solid rgb(230 207 170 / 24%);
+  background: rgb(20 17 14 / 96%);
+  color: #f0e6d5;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transform: translate(-50%, 8px);
+
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease,
+    visibility 220ms ease;
+}
+
+.book-hover-hint-title {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.book-hover-hint-action {
+  color: #c7b49a;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .featured-book-hotspot:hover .book-hover-hint {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+  }
+}
+
+
+/* =========================================
+   MASK ORIGINAL BOOK IN THE PHOTOGRAPH
+========================================= */
+
+.featured-book-mask {
+  position: absolute;
+  z-index: 2;
+  left: 47.5%;
+  top: 26.5%;
+  width: 12%;
+  height: 63%;
+
+  background: #160e09;
+
+  clip-path: polygon(
+    0 1%,
+    66% 0,
+    100% 97%,
+    30% 100%
+  );
+
+  animation: book-mask-in 220ms ease forwards;
+  pointer-events: none;
+}
+
+@keyframes book-mask-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 0.98;
+  }
+}
+
+
 /* =========================================
    PAGE DARKENING TRANSITION
 ========================================= */
@@ -235,36 +459,18 @@
   position: fixed;
   inset: 0;
   z-index: 999;
-
   background: #080706;
   opacity: 0;
   pointer-events: none;
-
-  animation:
-    surroundings-darken
-    var(--flight-duration)
-    cubic-bezier(0.3, 0, 0.2, 1)
-    forwards;
+  animation: surroundings-darken var(--flight-duration) linear forwards;
 }
 
 @keyframes surroundings-darken {
-  0% {
+  from {
     opacity: 0;
   }
 
-  20% {
-    opacity: 0.32;
-  }
-
-  45% {
-    opacity: 0.72;
-  }
-
-  72% {
-    opacity: 0.9;
-  }
-
-  100% {
+  to {
     opacity: 0.94;
   }
 }
@@ -288,11 +494,10 @@
   transform-origin: center center;
   pointer-events: none;
 
-  animation:
-    book-journey
-    var(--flight-duration)
-    cubic-bezier(0.22, 0.72, 0.18, 1)
-    forwards;
+animation: book-journey
+  var(--flight-duration)
+  cubic-bezier(0.22, 0.62, 0.28, 1)
+  both;
 }
 
 
@@ -307,12 +512,10 @@
 
   transform-style: preserve-3d;
   transform-origin: center center;
-
-  animation:
-    book-turn
-    var(--flight-duration)
-    cubic-bezier(0.22, 0.72, 0.18, 1)
-    forwards;
+animation: book-turn
+  var(--flight-duration)
+  cubic-bezier(0.22, 0.62, 0.28, 1)
+  both;
 }
 
 .book-face {
@@ -531,77 +734,22 @@
 */
 
 @keyframes book-journey {
-  0% {
-    opacity: 0.98;
-
-    transform:
-      translate(-50%, -50%)
-      translate3d(
-        var(--flight-x),
-        var(--flight-y),
-        0
-      )
-      scale(
-        var(--start-scale-x),
-        var(--start-scale-y)
-      );
-  }
-
-  22% {
+  from {
     opacity: 1;
-
     transform:
       translate(-50%, -50%)
-      translate3d(
-        calc(var(--flight-x) * 0.75),
-        calc(var(--flight-y) * 0.75 - 24px),
-        35px
-      )
-      scale(
-        calc(var(--start-scale-x) * 1.18),
-        calc(var(--start-scale-y) * 1.12)
-      );
+      translate3d(var(--flight-x), var(--flight-y), 0)
+      scale(var(--start-scale-x), var(--start-scale-y));
   }
 
-  48% {
-    transform:
-      translate(-50%, -50%)
-      translate3d(
-        calc(var(--flight-x) * 0.42),
-        calc(var(--flight-y) * 0.42 - 18px),
-        75px
-      )
-      scale(0.72, 0.76);
-  }
-
-  72% {
-    transform:
-      translate(-50%, -50%)
-      translate3d(
-        calc(var(--flight-x) * 0.12),
-        calc(var(--flight-y) * 0.12 - 8px),
-        100px
-      )
-      scale(0.96, 0.97);
-  }
-
-  90% {
-    transform:
-      translate(-50%, -50%)
-      translate3d(0, 0, 20px)
-      scale(1.025, 1.025);
-  }
-
-  100% {
+  to {
     opacity: 1;
-
     transform:
       translate(-50%, -50%)
       translate3d(0, 0, 0)
       scale(1, 1);
   }
 }
-
 
 /* =========================================
    BOOK ROTATION
@@ -613,35 +761,14 @@
 */
 
 @keyframes book-turn {
-  0% {
+  from {
     transform: rotateY(-78deg) rotateZ(-4deg);
   }
 
-  20% {
-    transform: rotateY(-65deg) rotateZ(-5deg);
-  }
-
-  42% {
-    transform: rotateY(-42deg) rotateZ(-3deg);
-  }
-
-  62% {
-    transform: rotateY(-20deg) rotateZ(-2deg);
-  }
-
-  80% {
-    transform: rotateY(-6deg) rotateZ(-1deg);
-  }
-
-  92% {
-    transform: rotateY(3deg) rotateZ(0.5deg);
-  }
-
-  100% {
+  to {
     transform: rotateY(0deg) rotateZ(0deg);
   }
 }
-
 
 /* =========================================
    SHELF CAPTION
@@ -702,5 +829,589 @@
   .book-light-sweep,
   .book-hover-hint {
     transition: none;
+  }
+}
+
+/* Match the animated cover's layout to Cover.jsx */
+
+.book-flight-layer .book-front {
+  overflow: hidden;
+}
+
+.book-flight-layer .book-front .cover-page {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: 12px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.book-flight-layer .book-front .cover-frame {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   FLYING BOOK CONTAINER
+========================================= */
+
+.book-flight-layer {
+  position: fixed;
+  z-index: 1000;
+  left: 50%;
+  top: 50%;
+
+  width: var(--book-width);
+  height: var(--book-height);
+
+  perspective: 1400px;
+  transform-style: preserve-3d;
+  transform-origin: center center;
+  pointer-events: none;
+
+animation: book-journey
+  var(--flight-duration)
+  cubic-bezier(0.22, 0.62, 0.28, 1)
+  both;
+}
+
+
+/* =========================================
+   3D HARDCOVER
+========================================= */
+
+.book-3d {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  transform-style: preserve-3d;
+  transform-origin: center center;
+animation: book-turn
+  var(--flight-duration)
+  cubic-bezier(0.22, 0.62, 0.28, 1)
+  both;
+}
+
+.book-face {
+  position: absolute;
+  overflow: hidden;
+  backface-visibility: hidden;
+}
+
+
+/* =========================================
+   FRONT COVER
+========================================= */
+
+.book-front {
+  inset: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgb(0 0 0 / 38%),
+      transparent 12%,
+      transparent 90%,
+      rgb(255 220 170 / 12%)
+    ),
+    linear-gradient(
+      135deg,
+      #61432e 0%,
+      #382319 48%,
+      #25170f 100%
+    );
+
+  border: 1px solid #9b7650;
+
+  box-shadow:
+    inset 4px 0 10px rgb(0 0 0 / 36%),
+    inset -2px 0 4px rgb(255 224 183 / 12%);
+
+  transform: translateZ(15px);
+}
+
+.cover-frame {
+  position: absolute;
+  inset: 12px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 10% 7%;
+
+  border: 1px solid rgb(218 183 131 / 45%);
+  color: #ead1a7;
+  text-align: center;
+}
+
+.cover-edition,
+.cover-bottom {
+  font-size: clamp(6px, 0.8vw, 9px);
+  letter-spacing: 0.15em;
+  line-height: 1.7;
+}
+
+.cover-title {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(19px, 3.2vw, 38px);
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+}
+
+.cover-title span:last-child {
+  font-size: 0.68em;
+}
+
+.cover-ornament {
+  font-size: 24px;
+  color: #c5a071;
+}
+
+.cover-divider {
+  width: 36%;
+  height: 1px;
+  background: #c5a071;
+}
+
+.cover-subtitle {
+  font-size: clamp(7px, 1vw, 11px);
+  letter-spacing: 0.16em;
+}
+
+
+/* =========================================
+   BACK COVER
+========================================= */
+
+.book-back {
+  inset: 0;
+
+  background:
+    linear-gradient(
+      135deg,
+      #382319,
+      #21140d
+    );
+
+  border: 1px solid #755137;
+
+  transform: rotateY(180deg) translateZ(15px);
+}
+
+
+/* =========================================
+   BOOK SPINE / BINDING
+========================================= */
+
+.book-spine {
+  top: 0;
+  left: -15px;
+  width: 30px;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    linear-gradient(
+      90deg,
+      #160e09,
+      #5a3824 45%,
+      #28180f
+    );
+
+  border: 1px solid #805638;
+
+  box-shadow:
+    inset 3px 0 5px rgb(0 0 0 / 55%),
+    inset -2px 0 3px rgb(255 220 170 / 12%);
+
+  transform: rotateY(-90deg);
+}
+
+.book-spine span {
+  writing-mode: vertical-rl;
+
+  font-family: 'Playfair Display', serif;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: #e4c18b;
+}
+
+
+/* =========================================
+   PAGE BLOCK
+========================================= */
+
+.book-pages {
+  top: 3px;
+  right: -13px;
+  width: 26px;
+  height: calc(100% - 6px);
+
+  background:
+    repeating-linear-gradient(
+      180deg,
+      #e7d8bc 0,
+      #e7d8bc 2px,
+      #c9b897 3px,
+      #f0e4cc 4px
+    );
+
+  border: 1px solid #a9936f;
+
+  transform: rotateY(90deg);
+}
+
+
+/* =========================================
+   TOP AND BOTTOM EDGES
+========================================= */
+
+.book-top,
+.book-bottom {
+  left: 0;
+  width: 100%;
+  height: 30px;
+
+  background: #4a2e1d;
+  border: 1px solid #775239;
+}
+
+.book-top {
+  top: -15px;
+  transform: rotateX(90deg);
+}
+
+.book-bottom {
+  bottom: -15px;
+  transform: rotateX(-90deg);
+}
+
+
+/* =========================================
+   BOOK MOVEMENT
+========================================= */
+
+/*
+  Stage 1: book starts small at the shelf.
+  Stage 2: it pulls forward and expands.
+  Stage 3: it approaches the centre.
+  Stage 4: it settles at full size.
+*/
+
+@keyframes book-journey {
+  from {
+    opacity: 1;
+    transform:
+      translate(-50%, -50%)
+      translate3d(var(--flight-x), var(--flight-y), 0)
+      scale(var(--start-scale-x), var(--start-scale-y));
+  }
+
+  to {
+    opacity: 1;
+    transform:
+      translate(-50%, -50%)
+      translate3d(0, 0, 0)
+      scale(1, 1);
+  }
+}
+
+/* =========================================
+   BOOK ROTATION
+========================================= */
+
+/*
+  The spine is visible at first.
+  The front cover turns gradually toward the viewer.
+*/
+
+@keyframes book-turn {
+  from {
+    transform: rotateY(-78deg) rotateZ(-4deg);
+  }
+
+  to {
+    transform: rotateY(0deg) rotateZ(0deg);
+  }
+}
+
+/* =========================================
+   SHELF CAPTION
+========================================= */
+
+.bookshelf-caption {
+  margin: 13px 0 0;
+  color: rgb(235 225 211 / 48%);
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.035em;
+}
+
+
+/* =========================================
+   RESPONSIVE STYLES
+========================================= */
+
+@media (max-width: 680px) {
+  .bookshelf-scene {
+    max-width: 520px;
+  }
+
+  .bookshelf-caption {
+    margin-top: 9px;
+    font-size: 10px;
+  }
+
+  .book-hover-hint {
+    display: none;
+  }
+
+  .cover-frame {
+    inset: 7px;
+  }
+
+  .cover-title {
+    gap: 8px;
+  }
+
+  .book-spine span {
+    font-size: 8px;
+  }
+}
+
+
+/* =========================================
+   ACCESSIBILITY
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .book-flight-backdrop,
+  .book-flight-layer,
+  .book-3d {
+    animation-duration: 400ms;
+  }
+
+  .book-light-sweep,
+  .book-hover-hint {
+    transition: none;
+  }
+}
+
+/* Match the animated cover's layout to Cover.jsx */
+
+.book-flight-layer .book-front {
+  overflow: hidden;
+}
+
+.book-flight-layer .book-front .cover-page {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: 12px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.book-flight-layer .book-front .cover-frame {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+/* =========================================
+   OPENING SCENE DISSOLUTION
+   ========================================= */
+
+html.golden-dissolve .portfolio-header,
+html.golden-dissolve .opening-intro,
+html.golden-dissolve .portfolio-footer,
+html.golden-dissolve .bookshelf-frame,
+html.golden-dissolve .bookshelf-caption {
+  animation: content-scatter-away 950ms cubic-bezier(0.2, 0.65, 0.3, 1) forwards;
+  pointer-events: none;
+  will-change: opacity, transform, filter;
+}
+
+html.golden-dissolve .portfolio-header {
+  --scatter-x: -28px;
+  --scatter-y: -24px;
+}
+
+html.golden-dissolve .opening-intro {
+  --scatter-x: -42px;
+  --scatter-y: 12px;
+}
+
+html.golden-dissolve .portfolio-footer {
+  --scatter-x: 12px;
+  --scatter-y: 32px;
+}
+
+html.golden-dissolve .bookshelf-frame {
+  --scatter-x: 35px;
+  --scatter-y: -12px;
+}
+
+html.golden-dissolve .bookshelf-caption {
+  --scatter-x: 25px;
+  --scatter-y: 20px;
+}
+
+@keyframes content-scatter-away {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+
+  30% {
+    opacity: 0.9;
+    filter: blur(0.5px);
+  }
+
+  100% {
+    opacity: 0;
+    transform:
+      translate3d(var(--scatter-x, 20px), var(--scatter-y, -20px), 0)
+      scale(0.94);
+    filter: blur(9px);
+  }
+}
+
+/* =========================================
+   GOLDEN PARTICLE SCATTER
+   ========================================= */
+
+.golden-particle-burst {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.golden-particle {
+  position: absolute;
+  left: var(--burst-x);
+  top: var(--burst-y);
+
+  width: var(--particle-size);
+  height: var(--particle-size);
+
+  border-radius: 50%;
+  background: #ffe8a3;
+
+  opacity: 0;
+
+  box-shadow:
+    0 0 4px 1px rgba(255, 220, 137, 0.9),
+    0 0 10px 3px rgba(255, 181, 55, 0.55),
+    0 0 22px 5px rgba(218, 147, 35, 0.2);
+
+  animation:
+    golden-spark-scatter
+    1050ms
+    cubic-bezier(0.15, 0.65, 0.25, 1)
+    var(--particle-delay)
+    both;
+
+  will-change: transform, opacity;
+}
+
+/* Bright sparks */
+
+.golden-particle-0 {
+  background: #fff5cf;
+  box-shadow:
+    0 0 5px 2px rgba(255, 239, 184, 0.95),
+    0 0 15px 5px rgba(255, 190, 75, 0.75);
+}
+
+/* Warm amber particles */
+
+.golden-particle-1 {
+  background: #ffc65e;
+  box-shadow:
+    0 0 5px 2px rgba(255, 194, 88, 0.9),
+    0 0 13px 4px rgba(214, 137, 32, 0.6);
+}
+
+/* Tiny glitter */
+
+.golden-particle-2 {
+  background: #fff0b7;
+  box-shadow:
+    0 0 4px 1px rgba(255, 239, 183, 0.95),
+    0 0 10px 3px rgba(255, 206, 100, 0.65);
+}
+
+/* Subtle gold embers */
+
+.golden-particle-3 {
+  background: #d99a38;
+  box-shadow:
+    0 0 4px 1px rgba(255, 193, 83, 0.7),
+    0 0 12px 3px rgba(198, 125, 29, 0.45);
+}
+
+@keyframes golden-spark-scatter {
+  0% {
+    opacity: 0;
+    transform:
+      translate(-50%, -50%)
+      rotate(var(--angle))
+      translateX(0)
+      scale(0.3);
+  }
+
+  12% {
+    opacity: 1;
+    transform:
+      translate(-50%, -50%)
+      rotate(var(--angle))
+      translateX(25px)
+      scale(1);
+  }
+
+  65% {
+    opacity: 0.85;
+    transform:
+      translate(-50%, -50%)
+      rotate(var(--angle))
+      translateX(calc(var(--distance) * 0.72))
+      scale(0.8);
+  }
+
+  100% {
+    opacity: 0;
+    transform:
+      translate(-50%, -50%)
+      rotate(var(--angle))
+      translateX(var(--distance))
+      scale(0.1);
+  }
+}
+
+/* Respect reduced-motion preferences */
+
+@media (prefers-reduced-motion: reduce) {
+  .golden-particle {
+    animation-duration: 300ms;
+    animation-delay: 0ms;
   }
 }

@@ -10,8 +10,8 @@ import '../styles/Book.css';
 
 function Book() {
   const bookRef = useRef(null);
-  const [position, setPosition] = useState(-1);
- const handleBookClick = (event) => {
+const [position, setPosition] = useState(-2);
+const handleBookClick = (event) => {
   if (
     event.target.closest(
       'a, button, input, textarea, select, [data-no-drag]'
@@ -20,16 +20,15 @@ function Book() {
     return;
   }
 
-  const bounds = event.currentTarget.getBoundingClientRect();
-  const clickX = event.clientX - bounds.left;
-
-  // Clicking the closed cover opens the book.
+  // Open the book when its cover is clicked.
   if (position <= -2) {
     bookRef.current?.next();
     return;
   }
 
-  // Once open, use the clicked half to determine direction.
+  const bounds = event.currentTarget.getBoundingClientRect();
+  const clickX = event.clientX - bounds.left;
+
   if (clickX >= bounds.width / 2) {
     bookRef.current?.next();
   } else {
@@ -70,14 +69,20 @@ defaultPosition={-2}
           position={position}
           onPositionChange={setPosition}
           renderPage={(page) => {
-            if (page.kind === 'cover') {
-              return (
-                <div className="grabfold-page-content">
-                  <Cover />
-                </div>
-              );
-            }
-
+            console.log('Grabfold page metadata:', page);
+if (page.kind === 'cover') {
+return (
+<div className="grabfold-page-content">
+{page.face === 'inside' ? (
+<Cover variant="inside" />
+) : page.side === 'back' ? (
+<Cover variant="back" />
+) : (
+<Cover variant="front" />
+)}
+</div>
+);
+}
             if (page.sheet === 0 && page.kind === 'front') {
               return (
                 <div className="grabfold-page-content">
