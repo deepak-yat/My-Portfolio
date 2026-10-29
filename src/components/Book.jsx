@@ -1,8 +1,6 @@
 
-import { useCallback, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { GrabfoldBook } from 'grabfold/react';
-import { webglFold, supportsWebGL } from 'grabfold/webgl';
-import { toCanvas } from 'html-to-image';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 import Cover from './Cover';
@@ -10,113 +8,34 @@ import Contents from './Contents';
 import Introduction from './Introduction';
 import '../styles/Book.css';
 
-const PAPER_COLOR = '#f2eee4';
-
-function getPageKey(page) {
-  if (page.kind === 'cover') {
-    return `cover-${page.side}-${page.face}`;
-  }
-
-  return `${page.kind}-${page.sheet}`;
-}
-
 function Book() {
   const bookRef = useRef(null);
-  const pageNodes = useRef(new Map());
-  const textureCache = useRef(new Map());
   const [position, setPosition] = useState(-1);
-
-  const registerPage = useCallback((page, node) => {
-    const key = getPageKey(page);
-
-    if (node) {
-      pageNodes.current.set(key, node);
-    } else {
-      pageNodes.current.delete(key);
-    }
-  }, []);
-
-  const getTexture = useCallback(async (page) => {
-    const key = getPageKey(page);
-
-    if (textureCache.current.has(key)) {
-      return textureCache.current.get(key);
-    }
-
-    // The React portal may not have mounted when the texture is requested.
-    // Wait briefly for its page element to become available.
-    let node = pageNodes.current.get(key);
-
-    for (let attempt = 0; !node && attempt < 20; attempt += 1) {
-      await new Promise((resolve) => requestAnimationFrame(resolve));
-      node = pageNodes.current.get(key);
-    }
-
-    if (!node) {
-      console.warn(`Grabfold: page texture not ready for ${key}`);
-      return null;
-    }
-
-    try {
-      const canvas = await toCanvas(node, {
-        pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
-        backgroundColor: PAPER_COLOR,
-        cacheBust: true,
-      });
-
-      textureCache.current.set(key, canvas);
-      return canvas;
-    } catch (error) {
-      console.error(`Could not capture page texture: ${key}`, error);
-      return null;
-    }
-  }, []);
-
-  const foldRenderer = useRef(null);
-
-  if (foldRenderer.current === null && supportsWebGL()) {
-    foldRenderer.current = webglFold({
-      texture: getTexture,
-      radius: 0.14,
-      segments: 48,
-      maxPixelRatio: 2,
-      cache: 8,
-    });
+ const handleBookClick = (event) => {
+  if (
+    event.target.closest(
+      'a, button, input, textarea, select, [data-no-drag]'
+    )
+  ) {
+    return;
   }
 
-  const renderContent = (page) => {
-    if (page.kind === 'cover') {
-      return <Cover />;
-    }
+  const bounds = event.currentTarget.getBoundingClientRect();
+  const clickX = event.clientX - bounds.left;
 
-    if (page.sheet === 0 && page.kind === 'front') {
-      return <Contents />;
-    }
-
-    if (page.sheet === 0 && page.kind === 'back') {
-      return <Introduction />;
-    }
-
-    return (
-      <article className="book-page">
-        <p className="eyebrow">MORE COMING SOON</p>
-        <h2>
-          Every page
-          <br />
-          has a story.
-        </h2>
-      </article>
-    );
-  };
-
-  const nextPage = () => {
+  // Clicking the closed cover opens the book.
+  if (position <= -2) {
     bookRef.current?.next();
-  };
+    return;
+  }
 
-  const previousPage = () => {
+  // Once open, use the clicked half to determine direction.
+  if (clickX >= bounds.width / 2) {
+    bookRef.current?.next();
+  } else {
     bookRef.current?.prev();
-  };
-
+  }
+};
   return (
     <section className="interactive-book">
       <div className="book-caption">
@@ -124,19 +43,24 @@ function Book() {
         <span>GRAB · FOLD · EXPLORE</span>
       </div>
 
-      <div className="book-wrapper grabfold-wrapper">
+      <div
+  className="book-wrapper grabfold-wrapper"
+  onClick={handleBookClick}
+>
         <GrabfoldBook
           ref={bookRef}
           sheets={2}
-          pageRatio={400 / 540}
-          layout="auto"
-          covers="inside"
+pageRatio={400 / 540}
+fit="width"
+layout="auto"
+covers="hard"
+defaultPosition={-2}
           duration={850}
           commitAt={0.4}
           dragThreshold={8}
           shadow={0.55}
           gutter={0.35}
-          lift={55}
+          lift={45}
           thickness={8}
           peek
           flick
@@ -145,24 +69,52 @@ function Book() {
           label="Deepak's developer portfolio"
           position={position}
           onPositionChange={setPosition}
-          foldRenderer={foldRenderer.current ?? undefined}
-          renderPage={(page) => (
-            <div
-              ref={(node) => registerPage(page, node)}
-              className="grabfold-page-content"
-              data-page-key={getPageKey(page)}
-            >
-              {renderContent(page)}
-            </div>
-          )}
+          renderPage={(page) => {
+            if (page.kind === 'cover') {
+              return (
+                <div className="grabfold-page-content">
+                  <Cover />
+                </div>
+              );
+            }
+
+            if (page.sheet === 0 && page.kind === 'front') {
+              return (
+                <div className="grabfold-page-content">
+                  <Contents />
+                </div>
+              );
+            }
+
+            if (page.sheet === 0 && page.kind === 'back') {
+              return (
+                <div className="grabfold-page-content">
+                  <Introduction />
+                </div>
+              );
+            }
+
+            return (
+              <div className="grabfold-page-content">
+                <article className="book-page">
+                  <p className="eyebrow">MORE COMING SOON</p>
+                  <h2>
+                    Every page
+                    <br />
+                    has a story.
+                  </h2>
+                </article>
+              </div>
+            );
+          }}
         />
       </div>
 
       <div className="book-controls">
         <button
           className="page-control"
-          onClick={previousPage}
-          disabled={!bookRef.current?.canPrev()}
+          onClick={() => bookRef.current?.prev()}
+          disabled={position <= -1}
           aria-label="Previous page"
         >
           <ArrowLeft size={17} />
@@ -177,8 +129,7 @@ function Book() {
 
         <button
           className="page-control"
-          onClick={nextPage}
-          disabled={!bookRef.current?.canNext()}
+          onClick={() => bookRef.current?.next()}
           aria-label="Next page"
         >
           <span>NEXT</span>

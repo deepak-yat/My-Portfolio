@@ -23,7 +23,7 @@
    ========================================= */
 
 .book-caption {
-  width: min(100%, 800px);
+  width: min(100%, 900px);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -46,7 +46,7 @@
 
 .book-wrapper {
   position: relative;
-  width: min(100%, 800px);
+  width: min(100%, 900px);
   min-width: 0;
   margin-inline: auto;
   display: flex;
@@ -54,20 +54,34 @@
   align-items: center;
 }
 
-/* Grabfold owns the page positioning and dimensions. */
+/* Give Grabfold a measurable container so it can calculate page dimensions. */
 .grabfold-wrapper {
-  --grabfold-paper: var(--book-paper);
-  --grabfold-lift: #fffdf6;
-  --grabfold-edge: var(--book-paper-edge);
-  --grabfold-board: #e8e1d4;
+  display: block;
+  width: min(100%, 900px);
+  min-width: 0;
+  margin-inline: auto;
 
-  filter: drop-shadow(0 22px 26px rgba(0, 0, 0, 0.19));
+  --grabfold-paper: #f2eee4;
+  --grabfold-lift: #fffdf6;
+  --grabfold-edge: #e6dfd2;
+  --grabfold-board: #e8e1d4;
 }
 
+/* Explicitly size the React adapter's host element. */
 .grabfold-wrapper > div {
+  display: block;
+  width: 100%;
   max-width: 100%;
   min-width: 0;
 }
+
+/* Keep the library's internal frame within the wrapper. */
+.grabfold-wrapper .grabfold-frame {
+  width: 100%;
+  max-width: 100%;
+  margin-inline: auto;
+}
+
 
 /* =========================================
    PAGE SURFACE
