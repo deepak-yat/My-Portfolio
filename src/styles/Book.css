@@ -1,58 +1,154 @@
+
+/* =========================================
+   INTERACTIVE PORTFOLIO BOOK
+   ========================================= */
+
 .interactive-book {
+  --book-paper: #f2eee4;
+  --book-paper-edge: #e6dfd2;
+  --book-ink: #292720;
+  --book-muted: #817b70;
+  --book-accent: #9b7957;
+  --book-line: rgba(68, 57, 42, 0.15);
+
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: #f2eee4;
 }
+
+/* =========================================
+   CAPTION
+   ========================================= */
 
 .book-caption {
   width: min(100%, 800px);
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 16px;
   margin-bottom: 22px;
   color: #a7a398;
   font-size: 9px;
+  font-weight: 400;
   letter-spacing: 0.14em;
+  line-height: 1.6;
 }
+
+.book-caption span:last-child {
+  text-align: right;
+}
+
+/* =========================================
+   BOOK FRAME
+   ========================================= */
 
 .book-wrapper {
+  position: relative;
   width: min(100%, 800px);
+  min-width: 0;
+  margin-inline: auto;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
-.portfolio-book {
-  margin: 0 auto;
+/* Grabfold owns the page positioning and dimensions. */
+.grabfold-wrapper {
+  --grabfold-paper: var(--book-paper);
+  --grabfold-lift: #fffdf6;
+  --grabfold-edge: var(--book-paper-edge);
+  --grabfold-board: #e8e1d4;
+
+  filter: drop-shadow(0 22px 26px rgba(0, 0, 0, 0.19));
 }
 
+.grabfold-wrapper > div {
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* =========================================
+   PAGE SURFACE
+   ========================================= */
+
+.grabfold-page-content,
 .page-shell {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: var(--paper);
-}
-
-.book-page {
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  padding: 30px;
+  background-color: var(--book-paper);
+  color: var(--book-ink);
+  box-sizing: border-box;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Subtle paper variation, without a heavy texture. */
+.grabfold-page-content {
+  background-image:
+    radial-gradient(
+      ellipse at 15% 20%,
+      rgba(255, 255, 255, 0.32),
+      transparent 55%
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(90, 75, 50, 0.012) 0,
+      rgba(90, 75, 50, 0.012) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+}
+
+/* =========================================
+   GENERAL PAGE
+   ========================================= */
+
+.book-page {
+  position: relative;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 30px;
+  overflow: hidden;
+  box-sizing: border-box;
+
+  color: var(--book-ink);
   background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.025), transparent 8%),
-    var(--paper);
-  color: var(--ink);
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.025),
+      transparent 8%
+    ),
+    var(--book-paper);
 }
+
+.book-page h1,
+.book-page h2,
+.book-page h3,
+.book-page p {
+  -webkit-font-smoothing: antialiased;
+}
+
+/* =========================================
+   COVER
+   ========================================= */
 
 .cover-page {
   padding: 32px;
   justify-content: space-between;
+
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.18), transparent 55%),
-    var(--paper);
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.18),
+      transparent 55%
+    ),
+    var(--book-paper);
 }
 
 .cover-topline,
@@ -61,61 +157,63 @@
 .page-bottomline {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 12px;
+
+  color: var(--book-muted);
   font-size: 8px;
+  font-weight: 400;
   letter-spacing: 0.12em;
-  color: var(--muted);
 }
 
 .cover-main {
   margin: auto 0;
 }
 
-.eyebrow {
-  margin: 0 0 22px;
-  font-size: 8px;
-  letter-spacing: 0.15em;
-  color: var(--muted);
-}
-
 .cover-main h1 {
   margin: 0;
   font-family: 'Playfair Display', serif;
-  font-size: clamp(55px, 8vw, 82px);
-  line-height: 0.98;
+  font-size: clamp(48px, 8vw, 82px);
   font-weight: 400;
+  line-height: 0.98;
   letter-spacing: -0.06em;
 }
 
 .cover-main h1 span {
-  color: var(--accent);
+  color: var(--book-accent);
 }
 
 .cover-divider {
   width: 46px;
   height: 1px;
   margin: 26px 0 18px;
-  background: var(--accent);
+  background: var(--book-accent);
 }
 
 .cover-description {
   max-width: 260px;
+  color: #615e56;
   font-size: 11px;
   line-height: 1.9;
-  color: #615e56;
 }
 
 .cover-cta {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   max-width: 240px;
   margin-top: 32px;
   padding-bottom: 12px;
-  border-bottom: 1px solid var(--line);
+
+  border-bottom: 1px solid var(--book-line);
   font-size: 8px;
   letter-spacing: 0.12em;
 }
+
+/* =========================================
+   CONTENTS
+   ========================================= */
 
 .content-page,
 .introduction-page {
@@ -130,14 +228,15 @@
 .introduction-main h2 {
   margin: 0;
   font-family: 'Playfair Display', serif;
-  font-weight: 400;
   font-size: clamp(30px, 5vw, 43px);
+  font-weight: 400;
   line-height: 1.12;
   letter-spacing: -0.045em;
 }
 
-.contents-heading h2 span {
-  color: var(--accent);
+.contents-heading h2 span,
+.introduction-main h2 span {
+  color: var(--book-accent);
 }
 
 .contents-list {
@@ -149,13 +248,13 @@
   align-items: center;
   gap: 12px;
   padding: 13px 0;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--book-line);
 }
 
 .contents-number {
   align-self: flex-start;
   padding-top: 3px;
-  color: var(--accent);
+  color: var(--book-accent);
   font-size: 9px;
 }
 
@@ -173,21 +272,25 @@
 
 .contents-info p {
   margin: 5px 0 0;
+  color: var(--book-muted);
   font-size: 7px;
   letter-spacing: 0.08em;
-  color: var(--muted);
 }
 
 .contents-arrow {
+  color: var(--book-muted);
   font-size: 14px;
-  color: var(--muted);
 }
 
 .page-bottomline {
   margin-top: auto;
   padding-top: 14px;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--book-line);
 }
+
+/* =========================================
+   INTRODUCTION
+   ========================================= */
 
 .introduction-main {
   margin: auto 0;
@@ -197,15 +300,11 @@
   font-size: clamp(31px, 5vw, 42px);
 }
 
-.introduction-main h2 span {
-  color: var(--accent);
-}
-
 .introduction-copy {
   margin: 24px 0 0;
+  color: #615e56;
   font-size: 10px;
   line-height: 2;
-  color: #615e56;
 }
 
 .introduction-note {
@@ -214,8 +313,9 @@
   gap: 10px;
   margin-top: 28px;
   padding-top: 16px;
-  border-top: 1px solid var(--line);
-  color: var(--accent);
+
+  border-top: 1px solid var(--book-line);
+  color: var(--book-accent);
 }
 
 .introduction-note span {
@@ -224,34 +324,59 @@
   letter-spacing: 0.08em;
 }
 
+/* =========================================
+   NAVIGATION
+   ========================================= */
+
 .book-controls {
   width: min(100%, 800px);
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   margin-top: 24px;
 }
 
 .page-control {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 9px;
   padding: 10px 0;
+
   border: 0;
   background: transparent;
   color: #f2eee4;
+
+  font: inherit;
   font-size: 9px;
   letter-spacing: 0.1em;
+
+  cursor: pointer;
+  transition:
+    color 180ms ease,
+    opacity 180ms ease;
+}
+
+.page-control:hover:not(:disabled) {
+  color: #c8a681;
+}
+
+.page-control:focus-visible {
+  outline: 1px solid #c8a681;
+  outline-offset: 5px;
 }
 
 .page-control:disabled {
   opacity: 0.3;
+  cursor: not-allowed;
 }
 
 .page-counter {
   color: #f2eee4;
   font-size: 11px;
   letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
 }
 
 .page-counter span {
@@ -259,9 +384,23 @@
   color: #77746b;
 }
 
+/* =========================================
+   RESPONSIVE LAYOUT
+   ========================================= */
+
 @media (max-width: 600px) {
   .book-caption {
+    gap: 8px;
+    margin-bottom: 16px;
     font-size: 7px;
+  }
+
+  .book-wrapper {
+    width: 100%;
+  }
+
+  .grabfold-wrapper {
+    filter: drop-shadow(0 16px 20px rgba(0, 0, 0, 0.17));
   }
 
   .book-page {
@@ -273,7 +412,7 @@
   }
 
   .cover-main h1 {
-    font-size: clamp(48px, 12vw, 68px);
+    font-size: clamp(42px, 12vw, 68px);
   }
 
   .content-page,
@@ -302,50 +441,18 @@
     font-size: 9px;
     line-height: 1.8;
   }
+
+  .book-controls {
+    margin-top: 18px;
+  }
 }
 
-/* Natural paper surface */
-.page-shell {
-  background: #f2eee4;
-  overflow: hidden;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
+/* =========================================
+   REDUCED MOTION
+   ========================================= */
 
-/* Fine paper grain and subtle variation */
-.book-page {
-  background-color: #f2eee4;
-  background-image:
-    radial-gradient(
-      ellipse at 15% 20%,
-      rgba(255, 255, 255, 0.32),
-      transparent 55%
-    ),
-    repeating-linear-gradient(
-      0deg,
-      rgba(90, 75, 50, 0.012) 0px,
-      rgba(90, 75, 50, 0.012) 1px,
-      transparent 1px,
-      transparent 4px
-    );
-}
-
-/* Make the book feel like a physical object */
-.book-wrapper {
-  filter: drop-shadow(0 24px 25px rgba(0, 0, 0, 0.2));
-}
-
-/* Preserve crisp text during the transformation */
-.book-page h1,
-.book-page h2,
-.book-page h3,
-.book-page p {
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Avoid unnecessary animations for reduced-motion users */
 @media (prefers-reduced-motion: reduce) {
-  .book-page {
-    scroll-behavior: auto;
+  .page-control {
+    transition: none;
   }
 }

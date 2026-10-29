@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "grabfold": "^0.1.0",
+    "html-to-image": "^1.11.13",
     "lucide-react": "^1.63.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
