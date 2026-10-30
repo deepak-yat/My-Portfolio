@@ -3,11 +3,12 @@ import { useRef, useState } from 'react';
 import { GrabfoldBook } from 'grabfold/react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
+import '../styles/Book.css';
+import '../styles/Cover.css';
+
 import Cover from './Cover';
 import Contents from './Contents';
 import Introduction from './Introduction';
-import '../styles/Book.css';
-
 function Book() {
   const bookRef = useRef(null);
 const [position, setPosition] = useState(-2);

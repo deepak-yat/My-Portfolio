@@ -353,3 +353,93 @@
   letter-spacing: 0.16em;
   line-height: 2;
 }
+
+/* =========================================
+   COVER STYLE OVERRIDE PROTECTION
+   ========================================= */
+
+.grabfold-page-content .cover-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+
+  box-sizing: border-box;
+  padding: 12px;
+
+  overflow: hidden;
+  isolation: isolate;
+
+  color: #e8d7b4;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 35%,
+      rgba(131, 91, 48, 0.2),
+      transparent 58%
+    ),
+    linear-gradient(
+      145deg,
+      #382719 0%,
+      #24180f 45%,
+      #17100b 100%
+    );
+}
+
+.grabfold-page-content .cover-page .cover-frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+
+  box-sizing: border-box;
+  padding: 22px 18px;
+
+  border: 1px solid rgba(204, 165, 103, 0.55);
+
+  background:
+    linear-gradient(
+      115deg,
+      rgba(255, 255, 255, 0.045),
+      transparent 35%,
+      rgba(0, 0, 0, 0.12)
+    );
+}
+
+/* Keep the animated and interactive covers consistent. */
+
+.book-flight-layer .book-front .cover-page {
+  width: 100%;
+  height: 100%;
+  padding: 12px;
+  box-sizing: border-box;
+  background:
+    radial-gradient(
+      ellipse at 50% 35%,
+      rgba(131, 91, 48, 0.2),
+      transparent 58%
+    ),
+    linear-gradient(
+      145deg,
+      #382719 0%,
+      #24180f 45%,
+      #17100b 100%
+    );
+}
+
+.book-flight-layer .book-front .cover-frame {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  height: 100%;
+  padding: 22px 18px;
+  box-sizing: border-box;
+}

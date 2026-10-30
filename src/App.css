@@ -303,3 +303,50 @@
     animation: none;
   }
 }
+
+
+/* =========================================
+   ARRIVAL — SURROUNDING CONTENT
+   ========================================= */
+
+.has-book-arrived .portfolio-header,
+.has-book-arrived .portfolio-footer,
+.has-book-arrived .book-caption,
+.has-book-arrived .book-controls,
+.has-book-arrived .back-to-shelf {
+  animation: portfolio-content-arrive 650ms ease-out both;
+}
+
+.has-book-arrived .portfolio-header {
+  animation-delay: 180ms;
+}
+
+.has-book-arrived .portfolio-footer {
+  animation-delay: 300ms;
+}
+
+.has-book-arrived .book-caption {
+  animation-delay: 250ms;
+}
+
+.has-book-arrived .book-controls {
+  animation-delay: 400ms;
+}
+
+.has-book-arrived .back-to-shelf {
+  animation-delay: 350ms;
+}
+
+@keyframes portfolio-content-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+    filter: blur(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}

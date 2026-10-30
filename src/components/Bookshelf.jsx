@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import '../styles/Bookshelf.css';
-
+import '../styles/Cover.css';
 const FLIGHT_DURATION = 1500;
 
 function Bookshelf({ onBookSelect }) {
@@ -29,15 +29,18 @@ useEffect(() => {
     const rect = triggerRef.current.getBoundingClientRect();
 
     // The final size represents a closed, portrait-format hardcover.
-    const targetWidth = Math.min(400, window.innerWidth * 0.78);
-    const targetHeight = Math.min(
-      targetWidth * 1.35,
-      window.innerHeight * 0.72
-    );
+// Final dimensions of one closed cover.
+// The complete Grabfold wrapper is 900px wide.
+const targetWidth = Math.min(
+  450,
+  window.innerWidth * 0.78,
+  window.innerHeight * 0.72 * (400 / 540)
+);
+
+const targetHeight = targetWidth * (540 / 400);
 
     const sourceCenterX = rect.left + rect.width / 2;
     const sourceCenterY = rect.top + rect.height / 2;
-
 setFlight({
   id: Date.now(),
 
@@ -49,8 +52,10 @@ setFlight({
 
   startScaleX: rect.width / targetWidth,
   startScaleY: rect.height / targetHeight,
-});
 
+  bookWidth: targetWidth,
+  bookHeight: targetHeight,
+});
     // Fallback in case animation events are interrupted.
     timeoutRef.current = window.setTimeout(() => {
       onBookSelect();
@@ -151,14 +156,8 @@ setFlight({
               '--start-scale-x': flight.startScaleX,
               '--start-scale-y': flight.startScaleY,
               '--flight-duration': `${FLIGHT_DURATION}ms`,
-              '--book-width': `${Math.min(
-                400,
-                window.innerWidth * 0.78
-              )}px`,
-              '--book-height': `${Math.min(
-                Math.min(400, window.innerWidth * 0.78) * 1.35,
-                window.innerHeight * 0.72
-              )}px`,
+'--book-width': `${flight.bookWidth}px`,
+'--book-height': `${flight.bookHeight}px`,
             }}
             onAnimationEnd={finishFlight}
             aria-hidden="true"

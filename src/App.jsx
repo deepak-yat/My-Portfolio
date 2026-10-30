@@ -8,8 +8,7 @@ function App() {
   const [isBookSelected, setIsBookSelected] = useState(false);
 
   return (
-    <main className="portfolio">
-      <header className="portfolio-header">
+<main className={`portfolio ${isBookSelected ? 'has-book-arrived' : ''}`}>      <header className="portfolio-header">
         <a className="brand" href="#home">
           DEEPAK T D
           <span>PERSONAL PORTFOLIO · 2026</span>
